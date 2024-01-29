@@ -28,5 +28,3 @@ jobs:
       - run: npm i
       - run: npm run build --if-present
       - run: npm test
-      - run: npm install -g serve
-      - run: serve -s build
