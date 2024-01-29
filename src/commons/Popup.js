@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCart } from "../store/slices/cartSlice";
 
@@ -7,15 +7,18 @@ export const Popup = ({ cartDetails }) => {
   const dispatch = useDispatch();
   const popupRef = useRef(null);
 
-  const handleClickOutside = (event) => {
-    if (
-      isOpenCart &&
-      popupRef.current &&
-      !popupRef.current.contains(event.target)
-    ) {
-      dispatch(toggleCart());
-    }
-  };
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (
+        isOpenCart &&
+        popupRef.current &&
+        !popupRef.current.contains(event.target)
+      ) {
+        dispatch(toggleCart());
+      }
+    },
+    [dispatch, isOpenCart]
+  );
 
   useEffect(() => {
     if (isOpenCart) {
@@ -24,7 +27,7 @@ export const Popup = ({ cartDetails }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpenCart, dispatch]);
+  }, [isOpenCart, dispatch, handleClickOutside]);
 
   return (
     <span ref={popupRef}>
